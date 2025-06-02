@@ -19,17 +19,29 @@ function ListarContas() {
     // },[])
 
     return (
-        <BaseLayout>
-          <div className="contas-container">
-            <h2>Contas</h2>
-            <ul>
+      <BaseLayout>
+        <div className="contas-container">
+          <h2>Contas</h2>
+          <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
               {contas.map((conta) => (
-                <li key={conta.id}>{conta.name}</li>
+                <tr key={conta.id}>
+                  <td>{conta.name}</td>
+                  <td>{conta.value}</td>
+                  <td>{conta.date}</td>
+                </tr>
               ))}
-            </ul>
-          </div>
-        </BaseLayout>
-      );
-    }
+            </tbody>
+          </table>
+        </div>
+      </BaseLayout>
+    );
+}
 
 export default ListarContas;

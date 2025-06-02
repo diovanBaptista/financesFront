@@ -10,14 +10,14 @@ const STATUS_CHOICES = [
 
 export default function CriarConta() {
   const [formData, setFormData] = useState({
-    status: "",
+    status: "Parte cadastro",
     name: "",
     description: "",
     value: "",
     date: "",
     installments: false,
     due_date_day: "",
-    installment_number: "",
+    installment_number: null,
     store: "",
     owner: "",
   });
@@ -32,6 +32,13 @@ export default function CriarConta() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const dataToSend = {
+      ...formData,
+      value: formData.value !== null && formData.value !== "" ? Number(formData.value) : null,
+      owner: formData.owner !== null && formData.owner !== "" ? Number(formData.owner) : null,
+    };
+
     try {
       const response = await criarConta(formData);
       console.log("Conta criada com sucesso:", response);

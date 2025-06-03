@@ -74,14 +74,14 @@ function ListarContas() {
                   <td>{conta.value}</td>
                   <td>{conta.date}</td>
                   <td className="opcaoe">
-                    <div>
+                    <div className="icon">
                       <FaEdit
                         onClick={() => editarConta(conta.id)}
                         style={{ color: "#36304A", cursor: "pointer", marginRight: '12px' }}
                         title="Editar"
                       />
                     </div>
-                    <div>
+                    <div className="icon">
                       <FaTrash
                         onClick={() => handleExcluirClick(conta.id)}
                         style={{ color: "#36304A", cursor: "pointer" }}

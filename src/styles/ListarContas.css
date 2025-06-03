@@ -78,3 +78,7 @@
     justify-content: space-around;
     align-items: center;
   }
+
+  .icon {
+    cursor: pointer;
+  }

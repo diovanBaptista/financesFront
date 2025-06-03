@@ -6,6 +6,7 @@ import "../styles/ListarContas.css"
 import { excluirConta as excluirContaService } from "../services/contasServices";
 import "../components/ConfirmaModal"
 import ConfirmModal from "../components/ConfirmaModal";
+import { useNavigate } from "react-router-dom";
 import formatDateToDDMMYYYY from "../components/FormatData"
 
 
@@ -20,7 +21,11 @@ function ListarContas() {
         });
       }, []);
 
+      const navigate = useNavigate()
 
+      const handleEditar = (id) => {
+        navigate(`/editar-conta/${id}`);
+      };
 
       const [modalAberto, setModalAberto] = useState(false);
       const [contaParaExcluir, setContaParaExcluir] = useState(null);
@@ -77,7 +82,7 @@ function ListarContas() {
                   <td className="opcaoe">
                     <div className="icon">
                       <FaEdit
-                        onClick={() => editarConta(conta.id)}
+                        onClick={() => handleEditar(conta.id)}
                         style={{ color: "#36304A", cursor: "pointer", marginRight: '12px' }}
                         title="Editar"
                       />

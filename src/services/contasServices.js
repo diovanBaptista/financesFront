@@ -14,9 +14,13 @@ export const criarConta = async (dados) => {
 };
 
 export const editarConta = async (id, dados) => {
-    return axios.put(`${API_URL}/${id}`,dados)
+    return axios.put(`${API_URL}${id}`,dados)
 };
 
 export const excluirConta = async (id) => {
-    return axios.delete(`${API_URL}/${id}`)
+    const token = localStorage.getItem("token"); // ou sessionStorage, ou um contexto
+  
+    return axios.delete(`${API_URL}${id}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,}})
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import BaseLayout from "../layouts/BaseLayout.jsx";
 import { criarConta } from "../services/contasServices.js";
+import "../styles/CriarContas.css"
 
 const STATUS_CHOICES = [ 
     'Parte cadastro',
@@ -19,7 +20,7 @@ export default function CriarConta() {
     due_date_day: "",
     installment_number: null,
     store: "",
-    owner: "",
+    owner: 2,
   });
 
   const handleChange = (e) => {
@@ -61,73 +62,50 @@ export default function CriarConta() {
 
   return (
     <BaseLayout>
-      <h2>Criar Conta</h2>
+    <div className="fundo">
+      <h2 className="titulo">Criar Conta</h2>
       <div className="form-wrapper">
         <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Status:</label>
-            <select name="status" value={formData.status} onChange={handleChange} required>
-              <option value="">-- Selecione --</option>
-              {STATUS_CHOICES.map((status) => (
-                <option key={status} value={status}>
-                  {status}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>Nome:</label>
-            <input name="name" type="text" value={formData.name} onChange={handleChange} required />
+          <div className="form-group linha-dupla">
+            <div className="coluna">
+              <label>Nome:</label>
+              <input name="name" type="text" value={formData.name} onChange={handleChange} required autoComplete="off" />
+            </div>
+            <div className="coluna">
+              <label>Loja:</label>
+              <input name="store" type="text" value={formData.store} onChange={handleChange} autoComplete="off" />
+            </div>
           </div>
 
           <div className="form-group">
             <label>Descrição:</label>
-            <input name="description" type="text" value={formData.description} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label>Valor:</label>
-            <input name="value" type="number" value={formData.value || ""} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label>Data:</label>
-            <input name="date" type="date" value={formData.date} onChange={handleChange} />
-          </div>
-
-          <div className="form-group checkbox-group">
-            <label>Parcelas:</label>
-            <input name="installments" type="checkbox" checked={formData.installments} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label>Dia do vencimento:</label>
-            <input name="due_date_day" value={formData.due_date_day} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label>Número da parcela:</label>
-            <input
-              name="installment_number"
-              type="number"
-              value={formData.installment_number || ""}
+            <textarea
+              name="description"
+              value={formData.description}
+              autoComplete="off"
               onChange={handleChange}
+              rows={3}
             />
           </div>
 
-          <div className="form-group">
-            <label>Loja:</label>
-            <input name="store" value={formData.store} onChange={handleChange} />
-          </div>
-
-          <div className="form-group">
-            <label>Owner (ID):</label>
-            <input name="owner" type="number" value={formData.owner || ""} onChange={handleChange} />
+          <div className="form-group linha-tripla">
+            <div className="coluna">
+              <label>Data:</label>
+              <input name="date" type="date" value={formData.date} onChange={handleChange} />
+            </div>
+            <div className="coluna">
+              <label>Valor:</label>
+              <input name="value" type="number" value={formData.value || ""} onChange={handleChange} autoComplete="off" />
+            </div>
+            <div className="coluna">
+              <label>Status:</label>
+              <input name="status" type="text" value={formData.status || "Parte cadastro"} readOnly />
+            </div>
           </div>
 
           <button type="submit">Criar Conta</button>
         </form>
+      </div>
       </div>
     </BaseLayout>
   );

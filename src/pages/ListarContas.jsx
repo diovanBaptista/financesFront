@@ -3,6 +3,10 @@ import {getContas} from "../services/contasServices"
 import BaseLayout from "../layouts/BaseLayout";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import "../styles/ListarContas.css"
+import { excluirConta as excluirContaService } from "../services/contasServices";
+import "../components/ConfirmaModal"
+import ConfirmModal from "../components/ConfirmaModal";
+
 
 
 function ListarContas() {
@@ -15,9 +19,31 @@ function ListarContas() {
         });
       }, []);
 
-    // useEffect(() =>{
-    //     getContas().then(data);
-    // },[])
+
+
+      const [modalAberto, setModalAberto] = useState(false);
+      const [contaParaExcluir, setContaParaExcluir] = useState(null);
+
+      const handleExcluirClick = (id) => {
+        setContaParaExcluir(id);
+        setModalAberto(true);
+      };
+
+      const confirmarExclusao = async () => {
+        try {
+          await excluirContaService(contaParaExcluir);
+          setContas((prevContas) =>
+            prevContas.filter((conta) => conta.id !== contaParaExcluir)
+          );
+          setModalAberto(false);
+          setContaParaExcluir(null);
+        } catch (error) {
+          console.error("Erro ao excluir conta:", error);
+          setModalAberto(false);
+          setContaParaExcluir(null);
+        }
+      };
+      
 
     return (
       <BaseLayout>
@@ -57,7 +83,7 @@ function ListarContas() {
                     </div>
                     <div>
                       <FaTrash
-                        onClick={() => excluirConta(conta.id)}
+                        onClick={() => handleExcluirClick(conta.id)}
                         style={{ color: "#36304A", cursor: "pointer" }}
                         title="Excluir"
                       />
@@ -68,6 +94,11 @@ function ListarContas() {
             </tbody>
           </table>
         </div>
+        <ConfirmModal
+          isOpen={modalAberto}
+          onCancel={() => setModalAberto(false)}
+          onConfirm={confirmarExclusao}
+        />
       </BaseLayout>
     );
 }

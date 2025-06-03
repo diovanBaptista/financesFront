@@ -6,6 +6,7 @@ import "../styles/ListarContas.css"
 import { excluirConta as excluirContaService } from "../services/contasServices";
 import "../components/ConfirmaModal"
 import ConfirmModal from "../components/ConfirmaModal";
+import formatDateToDDMMYYYY from "../components/FormatData"
 
 
 
@@ -72,7 +73,7 @@ function ListarContas() {
                 <tr key={conta.id}>
                   <td>{conta.name}</td>
                   <td>{conta.value}</td>
-                  <td>{conta.date}</td>
+                  <td>{formatDateToDDMMYYYY(conta.date)}</td>
                   <td className="opcaoe">
                     <div className="icon">
                       <FaEdit

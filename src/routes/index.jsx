@@ -9,7 +9,7 @@ export default function AppRoutes() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<ListarContas />} />
-            <Route path="/nova" element={<CriarContas />} />
+            <Route path="/cadastrar" element={<CriarContas />} />
             {/* <Route path="/editar/:id" element={<EditarConta />} /> */}
           </Routes>
         </BrowserRouter>

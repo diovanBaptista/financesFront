@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {getContas} from "../services/contasServices"
 import BaseLayout from "../layouts/BaseLayout";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import "../styles/ListarContas.css"
 
 
@@ -21,12 +22,23 @@ function ListarContas() {
     return (
       <BaseLayout>
         <div className="contas-container">
+          <div className="button-cadastrar">
           <h2>Contas</h2>
-          <table border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
+          <span>
+            <a href="/cadastrar">
+            <button>
+              Cadastrar
+            </button>
+            </a>
+          </span>
+          </div>
+          <table className="table" border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
             <thead>
               <tr>
                 <th>Nome</th>
                 <th>Valor</th>
+                <th>Data</th>
+                <th>Opções</th>
               </tr>
             </thead>
             <tbody>
@@ -35,6 +47,22 @@ function ListarContas() {
                   <td>{conta.name}</td>
                   <td>{conta.value}</td>
                   <td>{conta.date}</td>
+                  <td className="opcaoe">
+                    <div>
+                      <FaEdit
+                        onClick={() => editarConta(conta.id)}
+                        style={{ color: "#36304A", cursor: "pointer", marginRight: '12px' }}
+                        title="Editar"
+                      />
+                    </div>
+                    <div>
+                      <FaTrash
+                        onClick={() => excluirConta(conta.id)}
+                        style={{ color: "#36304A", cursor: "pointer" }}
+                        title="Excluir"
+                      />
+                    </div>
+                  </td>
                 </tr>
               ))}
             </tbody>

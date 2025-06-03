@@ -1,4 +1,6 @@
 .contas-container {
+    margin: 0 auto;
+    max-width: 80%;
     padding: 30px;
     background-color: #ffffff;
     border-radius: 8px;
@@ -6,10 +8,23 @@
     flex-grow: 1;
     width: 100%;
   }
+
+  .button-cadastrar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+  }
+
+  .button-cadastrar button {
+    background-color: rgb(14, 132, 5);
+    padding: 15px;
+  }
   
   .contas-container h2 {
     margin-bottom: 20px;
-    color: #2c3e50;
+    color: #36304A;
+    font-size: 2rem    
   }
   
   .contas-container ul {
@@ -26,4 +41,39 @@
   .contas-container li:last-child {
     border-bottom: none;
   }
+
+  .table {
+    border-collapse: separate; /* importante para bordas arredondadas */
+    border-spacing: 0;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    overflow: hidden; /* garante o arredondamento com conteúdo dentro */
+    width: 100%;
+    font-family: Arial, sans-serif;
+  }
   
+  /* Cabeçalho */
+  .table thead {
+    background-color: #36304A;
+    color: #ddd;
+  }
+  
+  /* Células do cabeçalho */
+  .table thead th {
+    padding: 12px;
+    text-align: left;
+  }
+  
+  /* Corpo da tabela */
+  .table tbody td {
+    padding: 12px;
+    border-top: 1px solid #eee;
+    color: #555; /* letras um pouco claras */
+    font-weight: 300;
+  }
+
+  .opcaoe {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }

@@ -1,112 +1,119 @@
 import { useEffect, useState } from "react";
-import {getContas} from "../services/contasServices"
-import BaseLayout from "../layouts/BaseLayout";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import "../styles/ListarContas.css"
-import { excluirConta as excluirContaService } from "../services/contasServices";
-import "../components/ConfirmaModal"
-import ConfirmModal from "../components/ConfirmaModal";
 import { useNavigate } from "react-router-dom";
-import formatDateToDDMMYYYY from "../components/FormatData"
+import { FaEdit, FaTrash, FaRegListAlt } from "react-icons/fa";
 
+import BaseLayout from "../layouts/BaseLayout";
+import ConfirmModal from "../components/ConfirmaModal";
 
+import {
+  getContas,
+  excluirConta as excluirContaService,
+} from "../services/contasServices";
+
+import formatDateToDDMMYYYY from "../components/FormatData";
+import "../styles/ListarContas.css";
 
 function ListarContas() {
-    const [contas, setContas] = useState([]);
+  const [contas, setContas] = useState([]);
+  const [modalAberto, setModalAberto] = useState(false);
+  const [contaParaExcluir, setContaParaExcluir] = useState(null);
 
-    useEffect(() => {
-        getContas().then((data) => {
-          console.log("Dados recebidos da API:", data); // <-- isso vai mostrar os dados
-          setContas(data);
-        });
-      }, []);
+  const navigate = useNavigate();
 
-      const navigate = useNavigate()
+  /* ─────────────── carregar contas ─────────────── */
+  useEffect(() => {
+    getContas().then((data) => setContas(data));
+  }, []);
 
-      const handleEditar = (id) => {
-        navigate(`/editar-conta/${id}`);
-      };
+  /* ─────────────── handlers ─────────────── */
+  const handleEditar = (id) => navigate(`/editar-conta/${id}`);
 
-      const [modalAberto, setModalAberto] = useState(false);
-      const [contaParaExcluir, setContaParaExcluir] = useState(null);
+  const handleVerParcelas = (id) =>
+    navigate(`/conta/${id}/parcelas`); // ajuste a rota se necessário
 
-      const handleExcluirClick = (id) => {
-        setContaParaExcluir(id);
-        setModalAberto(true);
-      };
+  const handleExcluirClick = (id) => {
+    setContaParaExcluir(id);
+    setModalAberto(true);
+  };
 
-      const confirmarExclusao = async () => {
-        try {
-          await excluirContaService(contaParaExcluir);
-          setContas((prevContas) =>
-            prevContas.filter((conta) => conta.id !== contaParaExcluir)
-          );
-          setModalAberto(false);
-          setContaParaExcluir(null);
-        } catch (error) {
-          console.error("Erro ao excluir conta:", error);
-          setModalAberto(false);
-          setContaParaExcluir(null);
-        }
-      };
-      
+  const confirmarExclusao = async () => {
+    try {
+      await excluirContaService(contaParaExcluir);
+      setContas((prev) => prev.filter((c) => c.id !== contaParaExcluir));
+    } catch (err) {
+      console.error("Erro ao excluir conta:", err);
+    } finally {
+      setModalAberto(false);
+      setContaParaExcluir(null);
+    }
+  };
 
-    return (
-      <BaseLayout>
-        <div className="contas-container">
-          <div className="button-cadastrar">
+  /* ─────────────── render ─────────────── */
+  return (
+    <BaseLayout>
+      <div className="contas-container">
+        <div className="button-cadastrar">
           <h2>Contas</h2>
-          <span>
-            <a href="/cadastrar">
-            <button>
-              Cadastrar
-            </button>
-            </a>
-          </span>
-          </div>
-          <table className="table" border="1" cellPadding="8" style={{ borderCollapse: "collapse", width: "100%" }}>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Valor</th>
-                <th>Data</th>
-                <th>Opções</th>
-              </tr>
-            </thead>
-            <tbody>
-              {contas.map((conta) => (
-                <tr key={conta.id}>
-                  <td>{conta.name}</td>
-                  <td>{conta.value}</td>
-                  <td>{formatDateToDDMMYYYY(conta.date)}</td>
-                  <td className="opcaoe">
-                    <div className="icon">
-                      <FaEdit
-                        onClick={() => handleEditar(conta.id)}
-                        style={{ color: "#36304A", cursor: "pointer", marginRight: '12px' }}
-                        title="Editar"
-                      />
-                    </div>
-                    <div className="icon">
-                      <FaTrash
-                        onClick={() => handleExcluirClick(conta.id)}
-                        style={{ color: "#36304A", cursor: "pointer" }}
-                        title="Excluir"
-                      />
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+          <a href="/cadastrar" className="link-cadastrar">
+            <button className="btn-cadastrar">Cadastrar</button>
+          </a>
         </div>
-        <ConfirmModal
-          isOpen={modalAberto}
-          onCancel={() => setModalAberto(false)}
-          onConfirm={confirmarExclusao}
-        />
-      </BaseLayout>
-    );
+
+        <table className="table" cellPadding="8">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>Valor</th>
+              <th>Data</th>
+              <th>Parcelas</th>
+              <th>Opções</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {contas.map((conta) => (
+              <tr key={conta.id}>
+                <td data-label="Nome">{conta.name}</td>
+                <td data-label="Valor">
+                  {Number(conta.value).toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </td>
+                <td data-label="Data">{formatDateToDDMMYYYY(conta.date)}</td>
+
+                <td data-label="Parcelas" className="opcaoe parcelas-col">
+                  <div className="icon">
+                    <FaRegListAlt
+                      title="Ver Parcelas"
+                      onClick={() => handleVerParcelas(conta.id)}
+                    />
+                  </div>
+                </td>
+
+                <td data-label="Opções" className="opcaoe">
+                  <div className="icon">
+                    <FaEdit title="Editar" onClick={() => handleEditar(conta.id)} />
+                    <FaTrash
+                      title="Excluir"
+                      onClick={() => handleExcluirClick(conta.id)}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ConfirmModal
+        isOpen={modalAberto}
+        onCancel={() => setModalAberto(false)}
+        onConfirm={confirmarExclusao}
+      />
+    </BaseLayout>
+  );
 }
 
 export default ListarContas;

@@ -1,15 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Sidebar.css";
 
 export default function Sidebar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
+
   return (
-    <aside className="sidebar">
-      <h3>Menu</h3>
-      <ul>
-        <li><a href="#">Dashboard</a></li>
-        <li><a href="/">Contas</a></li>
-        <li><a href="#">Relatórios</a></li>
-      </ul>
-    </aside>
+    <>
+      {/* Botão visível apenas em telas pequenas */}
+      <button className="menu-toggle" onClick={toggleSidebar}>
+        ☰
+      </button>
+
+      <aside className={`sidebar ${isOpen ? "open" : ""}`}>
+        <h3>Menu</h3>
+        <ul>
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="/">Contas</a></li>
+        </ul>
+      </aside>
+    </>
   );
 }

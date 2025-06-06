@@ -142,6 +142,7 @@ export default function CriarConta() {
                       value={formData.name}
                       onChange={handleChange}
                       required
+                      autoComplete="off"
                     />
                   </div>
                   <div className="coluna">
@@ -151,6 +152,7 @@ export default function CriarConta() {
                       type="text"
                       value={formData.store}
                       onChange={handleChange}
+                      autoComplete="off"
                     />
                   </div>
                 </div>
@@ -162,6 +164,7 @@ export default function CriarConta() {
                     value={formData.description}
                     onChange={handleChange}
                     rows={3}
+                    autoComplete="off"
                   />
                 </div>
 
@@ -182,6 +185,7 @@ export default function CriarConta() {
                       type="number"
                       value={formData.value || ""}
                       onChange={handleChange}
+                      autoComplete="off"
                     />
                   </div>
                   <div className="coluna">

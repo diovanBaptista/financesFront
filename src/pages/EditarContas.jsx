@@ -77,7 +77,7 @@ export default function EditarConta() {
 
   return (
     <BaseLayout>
-      <div className="fundo">
+      <div className="contas-container">
         <h2 className="titulo">Editar Conta</h2>
         <div className="form-wrapper">
           <form className="form" onSubmit={handleSubmit}>

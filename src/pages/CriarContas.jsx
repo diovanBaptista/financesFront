@@ -125,7 +125,7 @@ export default function CriarConta() {
 
   return (
     <BaseLayout>
-      <div className="fundo">
+      <div className="contas-container">
         <h2 className="titulo">Criar Conta</h2>
         <div className="form-wrapper">
           <form

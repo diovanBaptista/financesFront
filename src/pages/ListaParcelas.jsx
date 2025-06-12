@@ -4,6 +4,9 @@ import BaseLayout from "../layouts/BaseLayout";
 import "../styles/ListarParcelas.css";
 import { getParcelas, getContaPorId, pagarParcela } from "../services/parcelaServices";
 import formatDateToDDMMYYYY from "../components/FormatData";
+import { FaCheckCircle, FaTimesCircle, FaCalendarAlt } from "react-icons/fa";
+
+
 
 function ListarParcelas() {
   const { id } = useParams(); // ID da parcela
@@ -101,9 +104,41 @@ function ListarParcelas() {
         </div>
 
         <div className="insights">
-          <p><strong>Total pago:</strong> <div className="result pago">{calcularTotalPago(parcelas).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</div></p>
-          <p><strong>Total a pagar:</strong> <div className="result nao_pago">{calcularTotalAFaltar(parcelas).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}</div></p>
-          <p><strong>Última parcela:</strong> <div className="result ultimo_mes">{obterUltimoMes(parcelas)}</div></p>
+          <div className="result pago">
+            <p>
+              <FaCheckCircle style={{ fontSize:'1.5rem' , marginRight: "15px", color: "#28a745" }} />
+              <div className="componente_card">
+                <strong>Total pago: </strong>
+                {calcularTotalPago(parcelas).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </div>
+            </p>
+          </div>
+
+          <div className="result nao_pago">
+            <p>
+              <FaTimesCircle style={{ fontSize:'1.5rem' , marginRight: "15px", color: "#dc3545" }} />
+              <div className="componente_card">
+                <strong>Total a pagar: </strong>
+                {calcularTotalAFaltar(parcelas).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </div>
+            </p>
+          </div>
+
+          <div className="result ultimo_mes">
+            <p>
+              <FaCalendarAlt style={{ fontSize:'1.5rem' , marginRight: "15px", color: "#007bff" }} />
+              <div className="componente_card">
+                <strong>Última parcela: </strong>
+                {obterUltimoMes(parcelas)}
+              </div>
+            </p>
+          </div>
         </div>
 
         <table className="table" cellPadding="8">

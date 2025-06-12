@@ -2,38 +2,50 @@
 
 .insights {
   display: flex;
+  gap: 1rem;
   justify-content: space-between;
-  margin: 0 auto;
+  margin-bottom:10px;
+  background-color: #f7f7f7ea;
+  border-radius: 5px;
+}
 
+.componente_card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .insights strong {
-  color: #090809;
   font-size: 0.8rem;
+  color: rgb(22, 22, 22);
 }
 
 .insights p {
-  margin: 0 0 10px 0;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+
+
 .result {
-  padding: 25px;
+  padding: 10px 25px;
   border-radius: 5px ;
-  margin: 0 auto;
-  font-size: 1rem;
   font-weight: bold;
-  color: white;
+  color: rgb(15, 14, 14);
 }
  .pago {
-    background-color: #28a74687;
+    border-top: 13px solid #28a74687;;
  }
 
  .nao_pago {
-    background-color: #dc323279;
+    border-top: 13px solid #dc323279;
  }
 
  .ultimo_mes {
-    background-color: #7f6fb183;
+    border-top: 13px solid #7f6fb183;
  }
 
 

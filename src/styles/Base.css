@@ -1,0 +1,17 @@
+.page-container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 30px;
+    background: #f8f8f8;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }

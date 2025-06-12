@@ -92,7 +92,7 @@ export default function EditarConta() {
         <div className="form-wrapper">
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-group linha-dupla">
-              <div className="coluna">
+              {/* <div className="coluna">
                 <label>Owner:</label>
                 <input
                   name="owner"
@@ -100,7 +100,7 @@ export default function EditarConta() {
                   value={formData.owner}
                   readOnly
                 />
-              </div>
+              </div> */}
               <div className="coluna">
                 <label>Nome:</label>
                 <input

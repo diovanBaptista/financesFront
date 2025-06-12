@@ -57,6 +57,16 @@
   cursor: pointer;
 }
 
+.btn-pago {
+  background-color: black;
+  color: white;
+  cursor: default; /* pra indicar que não é clicável */
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+
 .btn-inativo {
   background-color: #ccc;
   color: #666;

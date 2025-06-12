@@ -2,7 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import BaseLayout from "../layouts/BaseLayout";
 import { editarConta, getContas } from "../services/contasServices"; 
-import "../styles/EditarConta.css"
+import "../styles/EditarConta.css";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function EditarConta() {
   const { id } = useParams();
@@ -25,16 +28,15 @@ export default function EditarConta() {
   useEffect(() => {
     async function fetchConta() {
       try {
-        // Sua API de getContas() retorna lista, então buscar o item pelo id:
         const contas = await getContas();
         const conta = contas.find((c) => c.id === Number(id));
         if (!conta) {
-          alert("Conta não encontrada.");
+          toast.error("Conta não encontrada.");
           navigate("/");
           return;
         }
 
-        // Convertendo data para input date (yyyy-mm-dd)
+        // Converter data para formato ISO yyyy-MM-dd
         const dateISO = conta.date ? new Date(conta.date).toISOString().substring(0, 10) : "";
 
         setFormData({
@@ -46,12 +48,19 @@ export default function EditarConta() {
           owner: conta.owner || "",
         });
       } catch (error) {
-        alert("Erro ao carregar conta");
+        toast.error("Erro ao carregar conta.");
         console.error(error);
       }
     }
 
     if (id) fetchConta();
+
+    // Mostrar notificação se flag estiver no localStorage
+    const notifyOnLoad = localStorage.getItem("notifyOnLoad");
+    if (notifyOnLoad === "successUpdate") {
+      toast.success("Conta atualizada com sucesso!");
+      localStorage.removeItem("notifyOnLoad");
+    }
   }, [id, navigate]);
 
   function handleChange(e) {
@@ -67,10 +76,11 @@ export default function EditarConta() {
 
     try {
       await editarConta(formData.id, formData);
-      alert("Conta atualizada com sucesso!");
+
+      localStorage.setItem("notifyOnLoad", "successUpdate");
       navigate("/");
     } catch (error) {
-      alert("Erro ao atualizar conta.");
+      toast.error("Erro ao atualizar conta.");
       console.error(error);
     }
   }
@@ -82,7 +92,7 @@ export default function EditarConta() {
         <div className="form-wrapper">
           <form className="form" onSubmit={handleSubmit}>
             <div className="form-group linha-dupla">
-            <div className="coluna">
+              <div className="coluna">
                 <label>Owner:</label>
                 <input
                   name="owner"
@@ -150,12 +160,10 @@ export default function EditarConta() {
                   onChange={handleChange}
                 />
               </div>
-              
             </div>
 
-
             <div className="form-group linha-tripla">
-            <div className="coluna">
+              <div className="coluna">
                 <label>Parcelado?</label>
                 <input
                   name="installments"
@@ -175,7 +183,7 @@ export default function EditarConta() {
                   readOnly
                 />
               </div>
-              
+
               <div className="coluna">
                 <label>Nº parcelas:</label>
                 <input
@@ -186,25 +194,21 @@ export default function EditarConta() {
                   readOnly
                 />
               </div>
-              
             </div>
 
-            
             <div className="button">
-                <button
-                    type="submit"
-                    onClick={() => navigate(-1)}
-                >
-                    Voltar
-                </button>
-                <button type="submit">Salvar</button>
+              <button
+                type="button"
+                onClick={() => navigate(-1)}
+              >
+                Voltar
+              </button>
+              <button type="submit">Salvar</button>
             </div>
           </form>
         </div>
       </div>
+      <ToastContainer />
     </BaseLayout>
   );
-};
-
-
-
+}

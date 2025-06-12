@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.jsx";
 import { criarConta, avancarConta, editarConta } from "../services/contasServices.js";
 import "../styles/CriarContas.css"
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+
 
 const STATUS_CHOICES = [ 
     'Parte cadastro',
@@ -10,7 +12,20 @@ const STATUS_CHOICES = [
     'Parte completada', 
 ];
 
+
 export default function CriarConta() {
+  
+  const notify = (message, type = "success") => {
+  toast[type](message, {
+    position: "top-right",
+    autoClose: 4000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+};
 
   const navigate = useNavigate()
 
@@ -75,21 +90,21 @@ export default function CriarConta() {
           id: res.data.id,
           status: res.data.status || "Parte cadastro",
         }));
-        alert("Conta criada com sucesso! Agora você pode avançar para a parte financeira.");
+        notify("Cadastro criado com sucesso!", "success");
       } else {
         await editarConta(formData.id, formData);
-        alert("Cadastro atualizado.");
+        notify("Cadastro atualizado com sucesso!", "success");
       }
     } catch (error) {
       console.error("Erro ao salvar cadastro:", error);
-      alert("Erro ao salvar cadastro.");
+      notify("Erro ao salvar cadastro.", "error");
     }
   };
 
   const handleAvancar = async () => {
     try {
       if (!formData.id) {
-        alert("Crie a conta primeiro!");
+        notify("Conta ainda não foi criada.", "warning");
         return;
       }
   
@@ -100,9 +115,10 @@ export default function CriarConta() {
         ...prev,
         ...res.data,
       }));
+      notify("Avançado para etapa financeira com sucesso!", "success");
     } catch (error) {
       console.error("Erro ao avançar etapa:", error);
-      alert("Erro ao avançar etapa.");
+      notify("Erro ao avançar etapa.", "error");
     }
   };
 
@@ -111,15 +127,15 @@ export default function CriarConta() {
     e.preventDefault();
     try {
       if (!formData.id) {
-        alert("Conta não criada ainda!");
+        notify("Conta não criada ainda!", "warning");
         return;
       }
       await editarConta(formData.id, formData);
-      alert("Dados financeiros salvos com sucesso!");
+      notify("Dados financeiros salvos com sucesso!", "success");
       navigate("/");
     } catch (error) {
       console.error("Erro ao salvar financeiro:", error);
-      alert("Erro ao salvar dados financeiros.");
+      notify("Erro ao salvar dados financeiros.", "error");
     }
   };
 
@@ -248,6 +264,7 @@ export default function CriarConta() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </BaseLayout>
   );
 }

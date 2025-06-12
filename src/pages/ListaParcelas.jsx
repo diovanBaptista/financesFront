@@ -6,7 +6,8 @@ import { getParcelas, getContaPorId, pagarParcela } from "../services/parcelaSer
 import formatDateToDDMMYYYY from "../components/FormatData";
 import { FaCheckCircle, FaTimesCircle, FaCalendarAlt } from "react-icons/fa";
 
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function ListarParcelas() {
   const { id } = useParams(); // ID da parcela
@@ -14,40 +15,44 @@ function ListarParcelas() {
   const [nomeConta, setNomeConta] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    async function carregarDados() {
-      try {
-        const parcelasDaConta = await getParcelas(id);
-        const parcelaPrincipal = parcelasDaConta[0];
-        console.log(parcelaPrincipal)
+  // Para reutilizar carregar dados
+  async function carregarDados() {
+    try {
+      const parcelasDaConta = await getParcelas(id);
+      const parcelaPrincipal = parcelasDaConta[0];
 
-        if (!parcelaPrincipal || !parcelaPrincipal.accounts) {
-          throw new Error("Conta não encontrada nas parcelas");
-        }
-
-        const idConta = parcelaPrincipal.accounts;
-
-        const parcelasData = await getParcelas(idConta);
-        const contaData = await getContaPorId(idConta);
-
-        setParcelas(parcelasData);
-        setNomeConta(contaData.name);
-      } catch (err) {
-        console.error("Erro ao carregar dados da conta/parcelas:", err);
+      if (!parcelaPrincipal || !parcelaPrincipal.accounts) {
+        throw new Error("Conta não encontrada nas parcelas");
       }
-    }
 
+      const idConta = parcelaPrincipal.accounts;
+
+      const parcelasData = await getParcelas(idConta);
+      const contaData = await getContaPorId(idConta);
+
+      setParcelas(parcelasData);
+      setNomeConta(contaData.name);
+    } catch (err) {
+      console.error("Erro ao carregar dados da conta/parcelas:", err);
+    }
+  }
+
+  useEffect(() => {
     carregarDados();
   }, [id]);
-
 
   const handlePagarParcela = async (idParcela) => {
     try {
       await pagarParcela(idParcela);
-      window.location.reload();
+
+      // Atualiza os dados na tela sem reload
       await carregarDados();
+
+      // Mostra notificação de sucesso
+      toast.success("Parcela paga com sucesso!");
     } catch (error) {
       console.error("Erro ao pagar parcela:", error);
+      toast.error("Erro ao pagar parcela. Tente novamente.");
     }
   };
 
@@ -90,8 +95,6 @@ function ListarParcelas() {
     
     return ultimaData.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
   };
-
-
 
   return (
     <BaseLayout>
@@ -154,7 +157,7 @@ function ListarParcelas() {
           <tbody>
             {parcelas.length === 0 ? (
               <tr>
-                <td colSpan="3">Nenhuma parcela encontrada.</td>
+                <td colSpan="4">Nenhuma parcela encontrada.</td>
               </tr>
             ) : (
               parcelas.map((parcela, index) => (
@@ -176,10 +179,16 @@ function ListarParcelas() {
                   <td>
                     <button
                       onClick={() => handlePagarParcela(parcela.id)}
-                      disabled={!isBotaoAtivo(parcela)}
-                      className={isBotaoAtivo(parcela) ? "btn-pagar" : "btn-inativo"}
+                      disabled={parcela.status === "Pago" || !isBotaoAtivo(parcela)}
+                      className={
+                        parcela.status === "Pago"
+                          ? "btn-pago"
+                          : isBotaoAtivo(parcela)
+                          ? "btn-pagar"
+                          : "btn-inativo"
+                      }
                     >
-                      Pagar
+                      {parcela.status === "Pago" ? "Pago" : "Pagar"}
                     </button>
                   </td>
                 </tr>
@@ -188,6 +197,8 @@ function ListarParcelas() {
           </tbody>
         </table>
       </div>
+      {/* Toast container para exibir notificações */}
+      <ToastContainer position="top-right" autoClose={3000} />
     </BaseLayout>
   );
 }

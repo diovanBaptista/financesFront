@@ -13,6 +13,9 @@ import {
 import formatDateToDDMMYYYY from "../components/FormatData";
 import "../styles/ListarContas.css";
 
+import { toast, ToastContainer } from "react-toastify";  // IMPORTAÇÕES AQUI
+import "react-toastify/dist/ReactToastify.css";
+
 function ListarContas() {
   const [contas, setContas] = useState([]);
   const [modalAberto, setModalAberto] = useState(false);
@@ -20,12 +23,17 @@ function ListarContas() {
 
   const navigate = useNavigate();
 
-  /* ─────────────── carregar contas ─────────────── */
   useEffect(() => {
     getContas().then((data) => setContas(data));
+
+    // Lógica para mostrar notificação após redirecionamento
+    const notifyOnLoad = localStorage.getItem("notifyOnLoad");
+    if (notifyOnLoad === "successUpdate") {
+      toast.success("Conta atualizada com sucesso!");
+      localStorage.removeItem("notifyOnLoad");
+    }
   }, []);
 
-  /* ─────────────── handlers ─────────────── */
   const handleEditar = (id) => navigate(`/editar-conta/${id}`);
 
   const handleVerParcelas = (id) =>
@@ -48,7 +56,6 @@ function ListarContas() {
     }
   };
 
-  /* ─────────────── render ─────────────── */
   return (
     <BaseLayout>
       <div className="contas-container">
@@ -112,6 +119,8 @@ function ListarContas() {
         onCancel={() => setModalAberto(false)}
         onConfirm={confirmarExclusao}
       />
+
+      <ToastContainer />
     </BaseLayout>
   );
 }

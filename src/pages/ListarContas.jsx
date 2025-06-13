@@ -13,7 +13,7 @@ import {
 import formatDateToDDMMYYYY from "../components/FormatData";
 import "../styles/ListarContas.css";
 
-import { toast, ToastContainer } from "react-toastify";  // IMPORTAÇÕES AQUI
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function ListarContas() {
@@ -21,23 +21,37 @@ function ListarContas() {
   const [modalAberto, setModalAberto] = useState(false);
   const [contaParaExcluir, setContaParaExcluir] = useState(null);
 
+  const [page, setPage] = useState(1);
+  const [pageSize] = useState(2);
+  const [totalCount, setTotalCount] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    getContas().then((data) => setContas(data));
+    carregarContas();
+  }, [page]);
 
-    // Lógica para mostrar notificação após redirecionamento
+  const carregarContas = async () => {
+    try {
+      const data = await getContas(page, pageSize);
+      setContas(data.results);
+      setTotalCount(data.count);
+    } catch (err) {
+      console.error("Erro ao buscar contas:", err);
+      setContas([]);
+    }
+
+    // Notificação após redirecionamento (exemplo)
     const notifyOnLoad = localStorage.getItem("notifyOnLoad");
     if (notifyOnLoad === "successUpdate") {
       toast.success("Conta atualizada com sucesso!");
       localStorage.removeItem("notifyOnLoad");
     }
-  }, []);
+  };
 
   const handleEditar = (id) => navigate(`/editar-conta/${id}`);
 
-  const handleVerParcelas = (id) =>
-    navigate(`/conta/${id}/parcelas`);
+  const handleVerParcelas = (id) => navigate(`/conta/${id}/parcelas`);
 
   const handleExcluirClick = (id) => {
     setContaParaExcluir(id);
@@ -47,12 +61,22 @@ function ListarContas() {
   const confirmarExclusao = async () => {
     try {
       await excluirContaService(contaParaExcluir);
-      setContas((prev) => prev.filter((c) => c.id !== contaParaExcluir));
+      // Após excluir, recarregar página atual para manter paginação correta
+      carregarContas();
     } catch (err) {
       console.error("Erro ao excluir conta:", err);
+      toast.error("Erro ao excluir conta.");
     } finally {
       setModalAberto(false);
       setContaParaExcluir(null);
+    }
+  };
+
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  const handlePageChange = (novaPagina) => {
+    if (novaPagina >= 1 && novaPagina <= totalPages) {
+      setPage(novaPagina);
     }
   };
 
@@ -70,7 +94,7 @@ function ListarContas() {
         <table className="table" cellPadding="8">
           <thead>
             <tr>
-              <th>Nome</th>
+              <th className="coluna-nome">Nome</th>
               <th>Valor</th>
               <th>Data</th>
               <th>Parcelas</th>
@@ -79,39 +103,68 @@ function ListarContas() {
           </thead>
 
           <tbody>
-            {contas.map((conta) => (
-              <tr key={conta.id}>
-                <td data-label="Nome">{conta.name}</td>
-                <td data-label="Valor">
-                  {Number(conta.value).toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
-                </td>
-                <td data-label="Data">{formatDateToDDMMYYYY(conta.date)}</td>
-
-                <td data-label="Parcelas" className="opcaoe parcelas-col">
-                  <div className="icon">
-                    <FaRegListAlt
-                      title="Ver Parcelas"
-                      onClick={() => handleVerParcelas(conta.id)}
-                    />
-                  </div>
-                </td>
-
-                <td data-label="Opções" className="opcaoe">
-                  <div className="icon">
-                    <FaEdit title="Editar" onClick={() => handleEditar(conta.id)} />
-                    <FaTrash
-                      title="Excluir"
-                      onClick={() => handleExcluirClick(conta.id)}
-                    />
-                  </div>
+            {contas.length === 0 ? (
+              <tr>
+                <td colSpan="5" style={{ textAlign: "center" }}>
+                  Nenhuma conta encontrada.
                 </td>
               </tr>
-            ))}
+            ) : (
+              contas.map((conta) => (
+                <tr key={conta.id}>
+                  <td data-label="Nome">{conta.name}</td>
+                  <td data-label="Valor">
+                    {Number(conta.value).toLocaleString("pt-BR", {
+                      style: "currency",
+                      currency: "BRL",
+                    })}
+                  </td>
+                  <td data-label="Data">{formatDateToDDMMYYYY(conta.date)}</td>
+
+                  <td data-label="Parcelas" className="opcaoe parcelas-col">
+                    <div className="icon">
+                      <FaRegListAlt
+                        title="Ver Parcelas"
+                        onClick={() => handleVerParcelas(conta.id)}
+                      />
+                    </div>
+                  </td>
+
+                  <td data-label="Opções" className="opcaoe">
+                    <div className="icon">
+                      <FaEdit title="Editar" onClick={() => handleEditar(conta.id)} />
+                      <FaTrash
+                        title="Excluir"
+                        onClick={() => handleExcluirClick(conta.id)}
+                      />
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
+
+        {/* Paginação simples */}
+        <div className="paginacao" style={{ marginTop: 20, textAlign: "center" }}>
+          <button
+            onClick={() => handlePageChange(page - 1)}
+            disabled={page === 1}
+            style={{ marginRight: 10 }}
+          >
+            Anterior
+          </button>
+          <span>
+            Página {page} de {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(page + 1)}
+            disabled={page === totalPages}
+            style={{ marginLeft: 10 }}
+          >
+            Próximo
+          </button>
+        </div>
       </div>
 
       <ConfirmModal

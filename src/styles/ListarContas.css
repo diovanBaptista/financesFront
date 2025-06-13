@@ -43,6 +43,9 @@
   padding: 12px;
   text-align: left;
 }
+.coluna-nome {
+  width: 150px;
+}
 
 .table td.parcelas-col,
 .table td.opcaoe {

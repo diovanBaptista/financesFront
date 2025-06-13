@@ -92,7 +92,7 @@ function ListarParcelas() {
       const data = new Date(p.maturity);
       return data > maisRecente ? data : maisRecente;
     }, new Date(0));
-    
+
     return ultimaData.toLocaleDateString("pt-BR", { month: "long", year: "numeric" });
   };
 
@@ -108,39 +108,45 @@ function ListarParcelas() {
 
         <div className="insights">
           <div className="result pago">
-            <p>
-              <FaCheckCircle style={{ fontSize:'1.5rem' , marginRight: "15px", color: "#28a745" }} />
+            <div className="tag-p">
+              <FaCheckCircle style={{ fontSize: '1.5rem', marginRight: "15px", color: "#28a745" }} />
               <div className="componente_card">
                 <strong>Total pago: </strong>
                 {calcularTotalPago(parcelas).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
+                <div>
+                </div>
               </div>
-            </p>
+            </div>
           </div>
 
           <div className="result nao_pago">
-            <p>
-              <FaTimesCircle style={{ fontSize:'1.5rem' , marginRight: "15px", color: "#dc3545" }} />
+            <div className="tag-p">
+              <FaTimesCircle style={{ fontSize: '1.5rem', marginRight: "15px", color: "#dc3545" }} />
               <div className="componente_card">
                 <strong>Total a pagar: </strong>
                 {calcularTotalAFaltar(parcelas).toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
+                <div>
+                </div>
               </div>
-            </p>
+            </div>
           </div>
 
           <div className="result ultimo_mes">
-            <p>
-              <FaCalendarAlt style={{ fontSize:'1.5rem' , marginRight: "15px", color: "#007bff" }} />
+            <div className="tag-p">
+              <FaCalendarAlt style={{ fontSize: '1.5rem', marginRight: "15px", color: "#007bff" }} />
               <div className="componente_card">
                 <strong>Última parcela: </strong>
                 {obterUltimoMes(parcelas)}
+                <div>
+                </div>
               </div>
-            </p>
+            </div>
           </div>
         </div>
 
@@ -166,9 +172,9 @@ function ListarParcelas() {
                   <td data-label="Valor">
                     {parcela.installment_value
                       ? Number(parcela.installment_value).toLocaleString("pt-BR", {
-                          style: "currency",
-                          currency: "BRL",
-                        })
+                        style: "currency",
+                        currency: "BRL",
+                      })
                       : "R$ 0,00"}
                   </td>
                   <td data-label="Vencimento">
@@ -184,8 +190,8 @@ function ListarParcelas() {
                         parcela.status === "Pago"
                           ? "btn-pago"
                           : isBotaoAtivo(parcela)
-                          ? "btn-pagar"
-                          : "btn-inativo"
+                            ? "btn-pagar"
+                            : "btn-inativo"
                       }
                     >
                       {parcela.status === "Pago" ? "Pago" : "Pagar"}

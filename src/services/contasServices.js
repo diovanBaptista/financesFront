@@ -32,13 +32,15 @@ const getAuthHeaders = () => {
   return headers;
 };
 
-// Listar contas
-export const getContas = async () => {
+export const getContas = async (page = 1, page_size = 2) => {
   const res = await axios.get(API_URL, {
     headers: getAuthHeaders(),
+    params: { page, page_size },
   });
   return res.data;
 };
+
+
 
 // Criar nova conta
 export const criarConta = async (dados) => {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEdit, FaTrash, FaRegListAlt } from "react-icons/fa";
-
+import { HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import BaseLayout from "../layouts/BaseLayout";
 import ConfirmModal from "../components/ConfirmaModal";
 
@@ -22,7 +22,7 @@ function ListarContas() {
   const [contaParaExcluir, setContaParaExcluir] = useState(null);
 
   const [page, setPage] = useState(1);
-  const [pageSize] = useState(2);
+  const [pageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
 
   const navigate = useNavigate();
@@ -91,6 +91,8 @@ function ListarContas() {
           </a>
         </div>
 
+
+      <div className="table-container">
         <table className="table" cellPadding="8">
           <thead>
             <tr>
@@ -144,26 +146,44 @@ function ListarContas() {
             )}
           </tbody>
         </table>
+        </div>
 
-        {/* Paginação simples */}
-        <div className="paginacao" style={{ marginTop: 20, textAlign: "center" }}>
-          <button
-            onClick={() => handlePageChange(page - 1)}
-            disabled={page === 1}
-            style={{ marginRight: 10 }}
-          >
-            Anterior
-          </button>
+        <div className="paginacao">
+          {/* Seta para voltar */}
+          {page > 1 && (
+            <button
+              onClick={() => handlePageChange(page - 1)}
+              style={{
+                marginRight: 10,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+              title="Página anterior"
+            >
+              <HiChevronLeft size={24} color="black" />
+            </button>
+          )}
+
           <span>
-            Página {page} de {totalPages}
+            {page} de {totalPages}
           </span>
-          <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === totalPages}
-            style={{ marginLeft: 10 }}
-          >
-            Próximo
-          </button>
+
+          {/* Seta para avançar */}
+          {page < totalPages && (
+            <button
+              onClick={() => handlePageChange(page + 1)}
+              style={{
+                marginLeft: 10,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+              }}
+              title="Próxima página"
+            >
+              <HiChevronRight size={24} color="black" />
+            </button>
+          )}
         </div>
       </div>
 

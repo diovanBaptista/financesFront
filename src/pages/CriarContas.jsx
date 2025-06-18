@@ -50,34 +50,28 @@ export default function CriarConta() {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
 
-    const dataToSend = {
-      ...formData,
-      value: formData.value !== null && formData.value !== "" ? Number(formData.value) : null,
-      owner: formData.owner !== null && formData.owner !== "" ? Number(formData.owner) : null,
-    };
-
-    try {
-      const response = await criarConta(formData);
-      console.log("Conta criada com sucesso:", response);
-      setFormData({
-        status: "",
-        name: "",
-        description: "",
-        value: "",
-        date: "",
-        installments: false,
-        due_date_day: "",
-        installment_number: "",
-        store: "",
-        owner: "",
-      });
-    } catch (error) {
-      console.error("Erro ao criar conta:", error);
-    }
-  };
+  //   try {
+  //     const response = await criarConta(formData);
+  //     console.log("Conta criada com sucesso:", response);
+  //     setFormData({
+  //       status: "",
+  //       name: "",
+  //       description: "",
+  //       value: "",
+  //       date: "",
+  //       installments: false,
+  //       due_date_day: "",
+  //       installment_number: "",
+  //       store: "",
+  //       owner: "",
+  //     });
+  //   } catch (error) {
+  //     console.error("Erro ao criar conta:", error);
+  //   }
+  // };
 
 
   const handleSubmitCadastro = async (e) => {
@@ -132,7 +126,7 @@ export default function CriarConta() {
       }
       await editarConta(formData.id, formData);
       notify("Dados financeiros salvos com sucesso!", "success");
-      navigate("/");
+      navigate("/contas");
     } catch (error) {
       console.error("Erro ao salvar financeiro:", error);
       notify("Erro ao salvar dados financeiros.", "error");

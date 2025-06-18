@@ -23,6 +23,11 @@
   cursor: pointer;
 }
 
+.table-container {
+  min-height: 300px;
+  padding-bottom: 16px;
+}
+
 .table {
   width: 100%;
   border: 1px solid #ccc;
@@ -80,6 +85,17 @@
 .table,
 .table * {
   box-sizing: border-box;
+}
+
+.paginacao {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.paginacao button {
+  cursor: pointer;
 }
 
 /* Responsivo */

@@ -18,7 +18,7 @@ export default function Sidebar() {
         <h3>Menu</h3>
         <ul>
           <li><a href="#">Dashboard</a></li>
-          <li><a href="/">Contas</a></li>
+          <li><a href="/contas">Contas</a></li>
         </ul>
       </aside>
     </>

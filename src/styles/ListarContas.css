@@ -1,0 +1,148 @@
+.contas-container {
+  margin: 50px auto;
+  max-width: 80%;
+  padding: 30px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+}
+
+.button-cadastrar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+}
+
+.btn-cadastrar {
+  background: rgb(14, 132, 5);
+  color: #fff;
+  padding: 15px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.table {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.table thead {
+  background: #36304a;
+  color: #ddd;
+}
+
+.table thead th,
+.table tbody td {
+  padding: 12px;
+  text-align: left;
+}
+.coluna-nome {
+  width: 150px;
+}
+
+.table td.parcelas-col,
+.table td.opcaoe {
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  white-space: nowrap;
+  min-width: 100px;
+  text-align: center;
+}
+
+.table td.opcaoe .icon,
+.table td.parcelas-col .icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.table td:not(.opcaoe):not(.parcelas-col) {
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.icon svg {
+  color: #36304a;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.table,
+.table * {
+  box-sizing: border-box;
+}
+
+/* Responsivo */
+@media screen and (max-width: 768px) {
+  .table thead {
+    display: none;
+  }
+
+  .button-cadastrar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .table tr {
+    display: block;
+    margin-bottom: 16px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    padding: 10px;
+    background: #fff;
+  }
+
+  .table td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    position: relative;
+    border-top: none;
+    word-break: break-word;
+    text-align: left;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    font-weight: bold;
+    color: #36304a;
+    flex-shrink: 0;
+    margin-right: 16px;
+    min-width: 80px;
+  }
+
+  .table td.parcelas-col,
+  .table td.opcaoe {
+    padding-left: 16px !important;
+    text-align: left !important; 
+  }
+
+  .table td.parcelas-col .icon,
+  .table td.opcaoe .icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    margin-top: 0;
+    margin-left: auto;
+  }
+
+  .icon svg {
+    font-size: 20px;
+    padding: 4px;
+    border-radius: 4px;
+  }
+}

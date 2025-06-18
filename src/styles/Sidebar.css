@@ -1,0 +1,72 @@
+.sidebar {
+  width: 220px;
+  background-color: #36304A;
+  color: white;
+  padding: 20px;
+  box-sizing: border-box;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.sidebar h3 {
+  margin-top: 0;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.sidebar ul li {
+  margin: 15px 0;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+}
+
+.sidebar ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Oculta o botão em telas grandes */
+.menu-toggle {
+  display: none;
+}
+
+/* Mostra o botão apenas em telas pequenas */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    height: 100vh;
+    width: 220px;
+    transition: left 0.3s ease;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .menu-toggle {
+    display: block;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background-color: #36304A;
+    color: white;
+    border: none;
+    padding: 10px;
+    font-size: 20px;
+    z-index: 1100;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+
+  .sidebar h3 {
+  margin-top: 50px;
+}
+}

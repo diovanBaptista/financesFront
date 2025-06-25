@@ -3,39 +3,41 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "../styles/Login.css";
-import { Link } from "react-router-dom";
+import "../styles/Login.css"; // pode reaproveitar o mesmo CSS
 import logo from "../assets/logocomercial.png";
 
-function Login() {
+
+function Register() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+
+    if (senha !== confirmarSenha) {
+      toast.error("As senhas não coincidem.");
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const response = await axios.post("http://localhost:8000/auth/jwt/create/", {
+      await axios.post("http://localhost:8000/auth/users/", {
+        username: email,
         email: email,
         password: senha,
+        re_password:senha,
+
       });
 
-      const accessToken = response.data.access;
-      const refreshToken = response.data.refresh;
-
-      localStorage.setItem("token", accessToken);
-      localStorage.setItem("refresh", refreshToken);
-
-      toast.success("Login realizado com sucesso!");
-      console.log('deu bom')
-      navigate("/contas");
-
+      toast.success("Cadastro realizado com sucesso!");
+      navigate("/login"); // redireciona para o login
     } catch (error) {
-      console.error("Erro no login:", error);
-      toast.error("Credenciais inválidas ou erro no servidor.");
+      console.error("Erro no cadastro:", error.response?.data || error.message);
+      toast.error("Erro ao registrar. Verifique os dados e tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -49,8 +51,8 @@ function Login() {
         </div>
 
         <div className="container-form">
-          <form className="form" onSubmit={handleLogin}>
-            <h2>Bem-vindo</h2>
+          <form className="form" onSubmit={handleRegister}>
+            <h2>Crie sua conta</h2>
 
             <input
               type="email"
@@ -69,13 +71,20 @@ function Login() {
               required
             />
 
-            <span><a href="#">Esqueci minha senha</a></span>
+            <input
+              type="password"
+              value={confirmarSenha}
+              onChange={(e) => setConfirmarSenha(e.target.value)}
+              placeholder="Confirmar senha"
+              maxLength={16}
+              required
+            />
 
             <button type="submit" disabled={loading}>
-              {loading ? "Entrando..." : "Entrar"}
+              {loading ? "Registrando..." : "Registrar"}
             </button>
 
-            <p>Não possui conta? <Link to="/register">Registre-se</Link></p>
+            <p>Já tem conta? <a href="/login">Entrar</a></p>
           </form>
         </div>
       </div>
@@ -84,4 +93,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

@@ -1,21 +1,23 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
+import Register from "../pages/Register"; // ⬅️ Novo import da tela de registro
 import ListarContas from "../pages/ListarContas";
 import EditarConta from "../pages/EditarContas";
 import CriarContas from "../pages/CriarContas";
 import ListarParcelas from "../pages/ListaParcelas";
-import PrivateRoute from "../components/PrivateRoute"; // ajuste o caminho conforme seu projeto
+import PrivateRoute from "../components/PrivateRoute"; // ⬅️ Protege as rotas logadas
 
 export default function AppRoutes() {
   return (
     <Routes>
-      {/* Redireciona da raiz para /login */}
+      {/* Redireciona a raiz para a tela de login */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
-      {/* Rota pública */}
+      {/* Rotas públicas */}
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-      {/* Rotas protegidas */}
+      {/* Rotas privadas */}
       <Route
         path="/contas"
         element={
@@ -24,7 +26,6 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/cadastrar"
         element={
@@ -33,7 +34,6 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/editar-conta/:id"
         element={
@@ -42,7 +42,6 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
-
       <Route
         path="/conta/:id/parcelas"
         element={
@@ -51,16 +50,6 @@ export default function AppRoutes() {
           </PrivateRoute>
         }
       />
-
-      {/* Se quiser uma página home protegida */}
-      {/* <Route
-        path="/home"
-        element={
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
-        }
-      /> */}
     </Routes>
   );
 }

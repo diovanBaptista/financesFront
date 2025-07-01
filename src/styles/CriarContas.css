@@ -74,6 +74,8 @@ textarea {
   border-radius: 4px;
   box-sizing: border-box;
   width: 100%;
+  background-color: #dfdfdfed;
+  color: #000000;
 }
 
 input:focus,

@@ -1,11 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/Login";
-import Register from "../pages/Register"; // ⬅️ Novo import da tela de registro
+import Register from "../pages/Register";
+import PasswordResetRequest from "../pages/PasswordResetRequest";
+import PasswordResetConfirm from "../pages/PasswordResetConfirm";
 import ListarContas from "../pages/ListarContas";
 import EditarConta from "../pages/EditarContas";
 import CriarContas from "../pages/CriarContas";
 import ListarParcelas from "../pages/ListaParcelas";
-import PrivateRoute from "../components/PrivateRoute"; // ⬅️ Protege as rotas logadas
+import PrivateRoute from "../components/PrivateRoute";
 
 export default function AppRoutes() {
   return (
@@ -16,6 +18,8 @@ export default function AppRoutes() {
       {/* Rotas públicas */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/forgot-password" element={<PasswordResetRequest />} />
+      <Route path="/password/reset/confirm/:uid/:token" element={<PasswordResetConfirm />} />
 
       {/* Rotas privadas */}
       <Route

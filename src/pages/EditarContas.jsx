@@ -29,14 +29,16 @@ export default function EditarConta() {
     async function fetchConta() {
       try {
         const contas = await getContas();
-        const conta = contas.find((c) => c.id === Number(id));
+        // Garantir que 'contas' é um array antes de usar find
+        const contasArray = Array.isArray(contas) ? contas : [];
+
+        const conta = contasArray.find((c) => c.id === Number(id));
         if (!conta) {
           toast.error("Conta não encontrada.");
-          navigate("/");
+          navigate("/contas");
           return;
         }
 
-        // Converter data para formato ISO yyyy-MM-dd
         const dateISO = conta.date ? new Date(conta.date).toISOString().substring(0, 10) : "";
 
         setFormData({
@@ -78,7 +80,7 @@ export default function EditarConta() {
       await editarConta(formData.id, formData);
 
       localStorage.setItem("notifyOnLoad", "successUpdate");
-      navigate("/");
+      navigate("/contas");
     } catch (error) {
       toast.error("Erro ao atualizar conta.");
       console.error(error);
@@ -197,10 +199,7 @@ export default function EditarConta() {
             </div>
 
             <div className="button">
-              <button
-                type="button"
-                onClick={() => navigate(-1)}
-              >
+              <button type="button" onClick={() => navigate(-1)}>
                 Voltar
               </button>
               <button type="submit">Salvar</button>

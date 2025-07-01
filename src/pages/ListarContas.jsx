@@ -34,14 +34,25 @@ function ListarContas() {
   const carregarContas = async () => {
     try {
       const data = await getContas(page, pageSize);
-      setContas(data.results);
-      setTotalCount(data.count);
+
+      // Corrige o erro de acesso ao "length" de undefined
+      const contasRecebidas = Array.isArray(data.results)
+        ? data.results
+        : Array.isArray(data)
+        ? data
+        : [];
+
+      const total = data.count || contasRecebidas.length || 0;
+
+      setContas(contasRecebidas);
+      setTotalCount(total);
     } catch (err) {
       console.error("Erro ao buscar contas:", err);
+      toast.error("Erro ao carregar contas.");
       setContas([]);
+      setTotalCount(0);
     }
 
-    // Notificação após redirecionamento (exemplo)
     const notifyOnLoad = localStorage.getItem("notifyOnLoad");
     if (notifyOnLoad === "successUpdate") {
       toast.success("Conta atualizada com sucesso!");
@@ -61,7 +72,6 @@ function ListarContas() {
   const confirmarExclusao = async () => {
     try {
       await excluirContaService(contaParaExcluir);
-      // Após excluir, recarregar página atual para manter paginação correta
       carregarContas();
     } catch (err) {
       console.error("Erro ao excluir conta:", err);
@@ -85,81 +95,71 @@ function ListarContas() {
       <div className="contas-container">
         <div className="button-cadastrar">
           <h2>Contas</h2>
-
           <a href="/cadastrar" className="link-cadastrar">
             <button className="btn-cadastrar">Cadastrar</button>
           </a>
         </div>
 
-
-      <div className="table-container">
-        <table className="table" cellPadding="8">
-          <thead>
-            <tr>
-              <th className="coluna-nome">Nome</th>
-              <th>Valor</th>
-              <th>Data</th>
-              <th>Parcelas</th>
-              <th>Opções</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {contas.length === 0 ? (
+        <div className="table-container">
+          <table className="table" cellPadding="8">
+            <thead>
               <tr>
-                <td colSpan="5" style={{ textAlign: "center" }}>
-                  Nenhuma conta encontrada.
-                </td>
+                <th className="coluna-nome">Nome</th>
+                <th>Valor</th>
+                <th>Data</th>
+                <th>Parcelas</th>
+                <th>Opções</th>
               </tr>
-            ) : (
-              contas.map((conta) => (
-                <tr key={conta.id}>
-                  <td data-label="Nome">{conta.name}</td>
-                  <td data-label="Valor">
-                    {Number(conta.value).toLocaleString("pt-BR", {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </td>
-                  <td data-label="Data">{formatDateToDDMMYYYY(conta.date)}</td>
+            </thead>
 
-                  <td data-label="Parcelas" className="opcaoe parcelas-col">
-                    <div className="icon">
-                      <FaRegListAlt
-                        title="Ver Parcelas"
-                        onClick={() => handleVerParcelas(conta.id)}
-                      />
-                    </div>
-                  </td>
-
-                  <td data-label="Opções" className="opcaoe">
-                    <div className="icon">
-                      <FaEdit title="Editar" onClick={() => handleEditar(conta.id)} />
-                      <FaTrash
-                        title="Excluir"
-                        onClick={() => handleExcluirClick(conta.id)}
-                      />
-                    </div>
+            <tbody>
+              {contas.length === 0 ? (
+                <tr>
+                  <td colSpan="5" style={{ textAlign: "center" }}>
+                    Nenhuma conta encontrada.
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : (
+                contas.map((conta) => (
+                  <tr key={conta.id}>
+                    <td data-label="Nome">{conta.name}</td>
+                    <td data-label="Valor">
+                      {Number(conta.value).toLocaleString("pt-BR", {
+                        style: "currency",
+                        currency: "BRL",
+                      })}
+                    </td>
+                    <td data-label="Data">{formatDateToDDMMYYYY(conta.date)}</td>
+                    <td data-label="Parcelas" className="opcaoe parcelas-col">
+                      <div className="icon">
+                        <FaRegListAlt
+                          title="Ver Parcelas"
+                          onClick={() => handleVerParcelas(conta.id)}
+                        />
+                      </div>
+                    </td>
+                    <td data-label="Opções" className="opcaoe">
+                      <div className="icon">
+                        <FaEdit title="Editar" onClick={() => handleEditar(conta.id)} />
+                        <FaTrash
+                          title="Excluir"
+                          onClick={() => handleExcluirClick(conta.id)}
+                        />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
 
         <div className="paginacao">
-          {/* Seta para voltar */}
           {page > 1 && (
             <button
               onClick={() => handlePageChange(page - 1)}
-              style={{
-                marginRight: 10,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
               title="Página anterior"
+              style={{ marginRight: 10, background: "none", border: "none", cursor: "pointer" }}
             >
               <HiChevronLeft size={24} color="black" />
             </button>
@@ -169,17 +169,11 @@ function ListarContas() {
             {page} de {totalPages}
           </span>
 
-          {/* Seta para avançar */}
           {page < totalPages && (
             <button
               onClick={() => handlePageChange(page + 1)}
-              style={{
-                marginLeft: 10,
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-              }}
               title="Próxima página"
+              style={{ marginLeft: 10, background: "none", border: "none", cursor: "pointer" }}
             >
               <HiChevronRight size={24} color="black" />
             </button>

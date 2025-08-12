@@ -1,0 +1,32 @@
+.insights {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 50px auto;
+}
+
+
+.result.entrada {
+    border-top: 13px solid #7f6fb183;
+}
+
+
+.result.totalConta {
+    border-top: 13px solid #ee0404b2;
+}
+
+.texto {
+    display: flex;
+    color: #36304A;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 2.5rem;
+}
+
+.subtitulo {
+    display: flex;
+    color: #36304A;
+    justify-content: start;
+    font-size: 1.5rem;
+}

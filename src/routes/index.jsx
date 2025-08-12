@@ -8,6 +8,8 @@ import EditarConta from "../pages/EditarContas";
 import CriarContas from "../pages/CriarContas";
 import ListarParcelas from "../pages/ListaParcelas";
 import PrivateRoute from "../components/PrivateRoute";
+import Dashboard from "../pages/Dashboard";
+
 
 export default function AppRoutes() {
   return (
@@ -19,7 +21,8 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<PasswordResetRequest />} />
-      <Route path="/password/reset/confirm/:uid/:token" element={<PasswordResetConfirm />} />
+      <Route path="/password/reset/confirm/:uid/:token" element={<PasswordResetConfirm />}
+       />
 
       {/* Rotas privadas */}
       <Route
@@ -27,6 +30,14 @@ export default function AppRoutes() {
         element={
           <PrivateRoute>
             <ListarContas />
+          </PrivateRoute>
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <PrivateRoute>
+            <Dashboard />
           </PrivateRoute>
         }
       />

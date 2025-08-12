@@ -17,7 +17,7 @@ export default function Sidebar() {
       <aside className={`sidebar ${isOpen ? "open" : ""}`}>
         <h3>Menu</h3>
         <ul>
-          <li><a href="#">Dashboard</a></li>
+          <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/contas">Contas</a></li>
         </ul>
       </aside>

@@ -9,6 +9,9 @@ import CriarContas from "../pages/CriarContas";
 import ListarParcelas from "../pages/ListaParcelas";
 import PrivateRoute from "../components/PrivateRoute";
 import Dashboard from "../pages/Dashboard";
+import CadastroConraMensais from "../pages/CadastroContaMensais";
+import CriaContaMensais from "../pages/CriarContaMensais";
+import EditarContaMensal from "../pages/EditarContaMensais";
 
 
 export default function AppRoutes() {
@@ -21,6 +24,9 @@ export default function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/forgot-password" element={<PasswordResetRequest />} />
+      <Route path="/conta-mensais" element={<CadastroConraMensais />} />
+      <Route path="/cadastro-conta-mensais" element={<CriaContaMensais />} />
+      <Route path="/editar-conta-mensais/:id" element={<EditarContaMensal />} />
       <Route path="/password/reset/confirm/:uid/:token" element={<PasswordResetConfirm />}
        />
 

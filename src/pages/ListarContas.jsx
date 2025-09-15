@@ -94,7 +94,7 @@ function ListarContas() {
     <BaseLayout>
       <div className="contas-container">
         <div className="button-cadastrar">
-          <h2>Contas</h2>
+          <h1 className="texto">Contas</h1>
           <a href="/cadastrar" className="link-cadastrar">
             <button className="btn-cadastrar">Cadastrar</button>
           </a>

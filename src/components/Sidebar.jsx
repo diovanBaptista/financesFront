@@ -20,6 +20,8 @@ export default function Sidebar() {
           <li><a href="/dashboard">Dashboard</a></li>
           <li><a href="/contas">Contas</a></li>
           <li><a href="/conta-mensais">Tipo Conta Mensais</a></li>
+          <li><a href="/lista-conta-mensais">Conta Mensais</a></li>
+          <li><a href="#">Entrada</a></li>
         </ul>
       </aside>
     </>

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import BaseLayout from "../layouts/BaseLayout";
 import { getContas } from "../services/mensalSrvice";
 import { toast } from "react-toastify";
-import { FaEdit, FaTrash, FaRegListAlt } from "react-icons/fa";
+import { MdRequestQuote } from "react-icons/md";
 import formatDateToDDMMYYYY from "../components/FormatData";
 
 export default function ListarContaMensal() {
@@ -23,7 +23,26 @@ export default function ListarContaMensal() {
 
       const total = data.count || contasRecebidas.length || 0;
 
-      setContas(contasRecebidas);
+      const agora = new Date()
+      const mesAtual = agora.getMonth();
+      const anoAtual = agora.getFullYear();
+
+      const contasOrdenadas = contasRecebidas.sort((a, b) => {
+        const dataA = new Date(a.data);
+        const dataB = new Date(b.data);
+
+        const ehMesAtualA =
+          dataA.getMonth() === mesAtual && dataA.getFullYear() === anoAtual;
+        const ehMesAtualB =
+          dataB.getMonth() === mesAtual && dataB.getFullYear() === anoAtual;
+
+        if (ehMesAtualA && !ehMesAtualB) return -1;
+        if (!ehMesAtualA && ehMesAtualB) return 1;
+
+        return dataB - dataA;
+      });
+
+      setContas(contasOrdenadas);
       setTotalCount(total);
     } catch (err) {
       console.error("Erro ao buscar contas:", err);
@@ -76,7 +95,7 @@ export default function ListarContaMensal() {
               ) : (
                 contas.map((conta) => (
                   <tr key={conta.id}>
-                    <td data-label="Nome">{conta.conta}</td>
+                    <td data-label="Nome">{conta.conta_name}</td>
                       <td data-label="Parcelas" className="opcaoe parcelas-col">
                         {conta.status}
                       </td>
@@ -89,11 +108,7 @@ export default function ListarContaMensal() {
                     <td data-label="Data">{formatDateToDDMMYYYY(conta.data)}</td>
                     <td data-label="Opções" className="opcaoe">
                       <div className="icon">
-                        <FaEdit title="Editar" onClick={() => handleEditar(conta.id)} />
-                        <FaTrash
-                          title="Excluir"
-                          onClick={() => handleExcluirClick(conta.id)}
-                        />
+                        <MdRequestQuote title="Pagar Conta" onClick={() => handleEditar(conta.id)} />
                       </div>
                     </td>
                   </tr>

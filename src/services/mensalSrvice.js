@@ -46,3 +46,8 @@ export const excluirConta = async (id) => {
 };
 
 
+export const pagarParcela = async (id) => {
+  const res = await axios.get(`${API_URL}${id}/avancar/`);
+  return res.data
+}
+

@@ -13,6 +13,7 @@ import CadastroConraMensais from "../pages/CadastroContaMensais";
 import CriaContaMensais from "../pages/CriarContaMensais";
 import EditarContaMensal from "../pages/EditarContaMensais";
 import ListarContaMensal from "../pages/ListaContaMensal";
+import CadastrosContaMensais from "../pages/ContaMensalCadastro";
 
 
 export default function AppRoutes() {
@@ -27,6 +28,7 @@ export default function AppRoutes() {
       <Route path="/forgot-password" element={<PasswordResetRequest />} />
       <Route path="/conta-mensais" element={<CadastroConraMensais />} />
       <Route path="/cadastro-conta-mensais" element={<CriaContaMensais />} />
+      <Route path="/nova-conta-mensais" element={<CadastrosContaMensais />} />
       <Route path="/lista-conta-mensais" element={<ListarContaMensal />} />
       <Route path="/editar-conta-mensais/:id" element={<EditarContaMensal />} />
       <Route path="/password/reset/confirm/:uid/:token" element={<PasswordResetConfirm />}

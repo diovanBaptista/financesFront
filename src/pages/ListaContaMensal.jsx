@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import BaseLayout from "../layouts/BaseLayout";
-import { getContas } from "../services/mensalSrvice";
+import { getContas, pagarParcela } from "../services/mensalSrvice";
 import { toast } from "react-toastify";
 import { MdRequestQuote } from "react-icons/md";
 import formatDateToDDMMYYYY from "../components/FormatData";
@@ -63,16 +63,30 @@ export default function ListarContaMensal() {
     carregarContas();
   }, [page, pageSize]);
 
+  const handleMudaStatus = async (idParcela) => {
+      try {
+        await pagarParcela(idParcela);
+
+        toast.success("Parcela paga com sucesso!");
+
+        setTimeout(() => {
+      window.location.reload();
+    }, 250);
+      } catch (error) {
+        console.error("Erro ao pagar parcela:", error);
+        toast.error("Erro ao pagar parcela. Tente novamente.");
+      }
+    };
+
   return (
     <BaseLayout>
       <div className="contas-container">
         <div className="button-cadastrar">
           <h1 className="texto">Contas Mensais</h1>
-          <a href="#" className="link-cadastrar">
+          <a href="/nova-conta-mensais" className="link-cadastrar">
             <button className="btn-cadastrar">Cadastrar</button>
           </a>
         </div>
-
         <div className="table-container">
           <table className="table" cellPadding="8">
             <thead>
@@ -108,7 +122,7 @@ export default function ListarContaMensal() {
                     <td data-label="Data">{formatDateToDDMMYYYY(conta.data)}</td>
                     <td data-label="Opções" className="opcaoe">
                       <div className="icon">
-                        <MdRequestQuote title="Pagar Conta" onClick={() => handleEditar(conta.id)} />
+                        <MdRequestQuote title="Pagar Conta" onClick={() => handleMudaStatus(conta.id)} />
                       </div>
                     </td>
                   </tr>

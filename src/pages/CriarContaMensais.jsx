@@ -28,7 +28,7 @@ export default function CriaContaMensais() {
       });
       if (response.ok) {
         alert("Conta criada com sucesso!");
-        setFormData({ nome: "" }); // limpa o campo
+        setFormData({ nome: "" });
       } else {
         const errorData = await response.json();
         console.error("Erro:", errorData);

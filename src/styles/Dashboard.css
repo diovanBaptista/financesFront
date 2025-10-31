@@ -30,3 +30,7 @@
     justify-content: start;
     font-size: 1.5rem;
 }
+
+.resuTexto {
+    font-size: 0.9rem !important;
+}

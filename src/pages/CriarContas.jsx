@@ -4,7 +4,10 @@ import { criarConta, avancarConta, editarConta } from "../services/contasService
 import "../styles/CriarContas.css"
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
-
+import { Calendar } from 'primereact/calendar';
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 const STATUS_CHOICES = [ 
     'Parte cadastro',
@@ -50,35 +53,21 @@ export default function CriarConta() {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-
-  //   try {
-  //     const response = await criarConta(formData);
-  //     console.log("Conta criada com sucesso:", response);
-  //     setFormData({
-  //       status: "",
-  //       name: "",
-  //       description: "",
-  //       value: "",
-  //       date: "",
-  //       installments: false,
-  //       due_date_day: "",
-  //       installment_number: "",
-  //       store: "",
-  //       owner: "",
-  //     });
-  //   } catch (error) {
-  //     console.error("Erro ao criar conta:", error);
-  //   }
-  // };
 
 
   const handleSubmitCadastro = async (e) => {
     e.preventDefault();
     try {
+      // Cria payload com data formatada
+      const payload = {
+        ...formData,
+        date: formData.data
+          ? formData.data.toISOString().split("T")[0]
+          : null,
+      };
+
       if (!formData.id) {
-        const res = await criarConta(formData);
+        const res = await criarConta(payload);
         setFormData((prev) => ({
           ...prev,
           id: res.data.id,
@@ -86,7 +75,7 @@ export default function CriarConta() {
         }));
         notify("Cadastro criado com sucesso!", "success");
       } else {
-        await editarConta(formData.id, formData);
+        await editarConta(formData.id, payload);
         notify("Cadastro atualizado com sucesso!", "success");
       }
     } catch (error) {
@@ -95,19 +84,20 @@ export default function CriarConta() {
     }
   };
 
+
   const handleAvancar = async () => {
     try {
       if (!formData.id) {
         notify("Conta ainda não foi criada.", "warning");
         return;
       }
-  
+
       const res = await avancarConta(formData.id);
-  
-  
+
       setFormData((prev) => ({
         ...prev,
         ...res.data,
+        data: res.data.date ? new Date(res.data.date) : null, // converte para Date
       }));
       notify("Avançado para etapa financeira com sucesso!", "success");
     } catch (error) {
@@ -181,11 +171,19 @@ export default function CriarConta() {
                 <div className="form-group linha-tripla">
                   <div className="coluna">
                     <label>Data:</label>
-                    <input
-                      name="date"
-                      type="date"
-                      value={formData.date}
-                      onChange={handleChange}
+                    <Calendar
+                      name="data"
+                      value={formData.data ? new Date(formData.data) : null}
+                      onChange={(e) =>
+                          setFormData((prev) => ({
+                          ...prev,
+                          data: e.value,
+                          }))
+                      }
+                      dateFormat="yy-mm-dd"
+                      showIcon
+                      placeholder="Selecione a data"
+                      className="border rounded "
                     />
                   </div>
                   <div className="coluna">

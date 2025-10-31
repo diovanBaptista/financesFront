@@ -90,7 +90,7 @@ export default function Dashboard() {
           {insights.map((insight, index) => (
             <div key={index} className={`result ${insight.status}`}>
               <strong className="tag-p">{insight.label}</strong>
-              <div className="result">{insight.value}</div>
+              <div className="result resuTexto">{insight.value}</div>
             </div>
           ))}
         </div>

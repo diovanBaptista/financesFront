@@ -3,7 +3,10 @@ import { toast } from "react-toastify";
 import BaseLayout from "../layouts/BaseLayout";
 import { criarConta } from "../services/mensalSrvice"; // ajuste o nome do arquivo se necessário
 import { getContas } from "../services/contaMensaisServices";
-// import { Calendar } from 'primereact/calendar';
+import { Calendar } from 'primereact/calendar';
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
 
 export default function CadastrosContaMensais() {
   const [formData, setFormData] = useState({
@@ -41,7 +44,13 @@ export default function CadastrosContaMensais() {
     e.preventDefault();
 
     try {
-      await criarConta(formData);
+      await criarConta({
+      ...formData,
+      data: formData.data
+        ? formData.data.toISOString().split("T")[0]
+        : null,
+    });
+    
       toast.success("Conta criada com sucesso!");
 
       // Limpa o formulário após salvar
@@ -102,14 +111,20 @@ export default function CadastrosContaMensais() {
           </div>
 
           <div className="coluna">
-          <input
-            type="date"
+          <Calendar
             name="data"
-            value={formData.data}
-            onChange={handleChange}
-            className="border p-2 rounded"
-            required
-          />
+            value={formData.data ? new Date(formData.data) : null}
+            onChange={(e) =>
+                setFormData((prev) => ({
+                ...prev,
+                data: e.value,
+                }))
+            }
+            dateFormat="yy-mm-dd"
+            showIcon
+            placeholder="Selecione a data"
+            className="border rounded "
+            />
 
           </div>
 
